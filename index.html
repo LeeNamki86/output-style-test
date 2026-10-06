@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <!-- 한글이 깨지지 않도록 문자 인코딩을 UTF-8로 지정 -->
+  <meta charset="UTF-8">
+  <!-- 휴대폰에서도 화면 크기에 맞게 보이도록 설정 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이남기의 프로필</title>
+  <style>
+    /* 페이지 전체: 가운데 정렬 + 부드러운 배경색 */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Malgun Gothic", sans-serif;
+      background: #eef2f7;
+      color: #1f2937;
+    }
+
+    /* 프로필 카드: 흰색 상자 + 둥근 모서리 + 그림자 */
+    .card {
+      width: 100%;
+      max-width: 420px;
+      margin: 16px;
+      padding: 32px 24px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .intro {
+      margin: 0 0 24px;
+      color: #6b7280;
+    }
+
+    /* 프로젝트 링크 목록: 글머리 기호(점) 없애기 */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* 각 링크를 버튼처럼 보이게 만들기 */
+    li a {
+      display: block;
+      margin-bottom: 12px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #2563eb;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* 마우스를 올렸을 때 색을 조금 진하게 */
+    li a:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+  <!-- 프로필 카드 영역 -->
+  <main class="card">
+    <h1>👋 안녕하세요, 이남기입니다</h1>
+    <p class="intro">HTML과 JavaScript로 만든 작은 프로젝트 모음입니다.</p>
+
+    <!-- 내 프로젝트로 이동하는 링크 목록 -->
+    <ul>
+      <li><a href="calculator.html">🧮 계산기</a></li>
+      <li><a href="counter.html">🔢 카운터</a></li>
+      <li><a href="todo.html">📝 할 일 목록</a></li>
+    </ul>
+  </main>
+</body>
+</html>
