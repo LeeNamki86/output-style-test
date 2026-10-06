@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>계산기</title>
+  <style>
+    :root {
+      --bg: #f4f5f7;
+      --card: #ffffff;
+      --text: #1f2328;
+      --muted: #8a8f98;
+      --key: #eef0f3;
+      --key-hover: #e2e5ea;
+      --op: #4f6bed;
+      --op-text: #ffffff;
+      --border: #e3e5e8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #16181c;
+        --card: #1f2227;
+        --text: #e8eaed;
+        --muted: #8a8f98;
+        --key: #2a2e34;
+        --key-hover: #353a41;
+        --op: #7b93ff;
+        --op-text: #10131a;
+        --border: #2e3238;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+    }
+    .calculator {
+      width: 100%;
+      max-width: 320px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .display {
+      text-align: right;
+      padding: 8px 4px 16px;
+      min-height: 88px;
+    }
+    .expression {
+      font-size: 14px;
+      color: var(--muted);
+      min-height: 20px;
+    }
+    .current {
+      font-size: 40px;
+      font-weight: 500;
+      word-break: break-all;
+      font-variant-numeric: tabular-nums;
+    }
+    .keys {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    button {
+      height: 60px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      background: var(--key);
+      color: var(--text);
+      cursor: pointer;
+    }
+    button:hover { background: var(--key-hover); }
+    button[data-action="operator"],
+    button[data-action="equals"] {
+      background: var(--op);
+      color: var(--op-text);
+    }
+    button[data-action="clear"],
+    button[data-action="backspace"] { color: var(--muted); }
+    .wide { grid-column: span 2; }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display">
+      <div class="expression" id="expression"></div>
+      <div class="current" id="current">0</div>
+    </div>
+
+    <div class="keys" id="keys">
+      <button data-action="clear" class="wide">AC</button>
+      <button data-action="backspace">⌫</button>
+      <button data-action="operator" data-value="÷">÷</button>
+
+      <button data-action="digit" data-value="7">7</button>
+      <button data-action="digit" data-value="8">8</button>
+      <button data-action="digit" data-value="9">9</button>
+      <button data-action="operator" data-value="×">×</button>
+
+      <button data-action="digit" data-value="4">4</button>
+      <button data-action="digit" data-value="5">5</button>
+      <button data-action="digit" data-value="6">6</button>
+      <button data-action="operator" data-value="−">−</button>
+
+      <button data-action="digit" data-value="1">1</button>
+      <button data-action="digit" data-value="2">2</button>
+      <button data-action="digit" data-value="3">3</button>
+      <button data-action="operator" data-value="+">+</button>
+
+      <button data-action="digit" data-value="0" class="wide">0</button>
+      <button data-action="decimal">.</button>
+      <button data-action="equals">=</button>
+    </div>
+  </div>
+
+  <script>
+    const currentEl = document.getElementById('current');
+    const expressionEl = document.getElementById('expression');
+
+    // 계산기 상태
+    let current = '0';        // 지금 입력 중인 숫자 (문자열)
+    let previous = null;      // 연산자 앞에 입력한 숫자
+    let operator = null;      // '+', '−', '×', '÷'
+    let justEvaluated = false; // '=' 직후인지 (다음 숫자 입력 시 새로 시작)
+
+    /**
+     * 두 수에 연산자를 적용한 결과를 돌려준다.
+     * @param {number} a - 왼쪽 피연산자
+     * @param {string} op - '+', '−', '×', '÷' 중 하나
+     * @param {number} b - 오른쪽 피연산자
+     * @returns {number|null} 계산 결과, 계산할 수 없으면 null (화면에 "오류" 표시)
+     */
+    function calculate(a, op, b) {
+      // TODO(human)
+      return b;
+    }
+
+    function format(value) {
+      if (value === null || !Number.isFinite(value)) return '오류';
+      // 부동소수점 오차 정리 (0.1 + 0.2 → 0.3)
+      return String(parseFloat(value.toPrecision(12)));
+    }
+
+    function render() {
+      currentEl.textContent = current;
+      expressionEl.textContent =
+        previous !== null && operator ? `${previous} ${operator}` : '';
+    }
+
+    function inputDigit(d) {
+      if (justEvaluated || current === '오류') {
+        current = '0';
+        justEvaluated = false;
+      }
+      current = current === '0' ? d : current + d;
+    }
+
+    function inputDecimal() {
+      if (justEvaluated || current === '오류') {
+        current = '0';
+        justEvaluated = false;
+      }
+      if (!current.includes('.')) current += '.';
+    }
+
+    function evaluate() {
+      if (previous === null || operator === null) return;
+      const result = calculate(Number(previous), operator, Number(current));
+      current = format(result);
+      previous = null;
+      operator = null;
+      justEvaluated = true;
+    }
+
+    function inputOperator(op) {
+      if (current === '오류') return;
+      // 연산자를 연속으로 누르면 앞의 계산을 먼저 끝낸다 (2 + 3 × → 5 ×)
+      if (previous !== null && operator && !justEvaluated) {
+        evaluate();
+        if (current === '오류') return;
+      }
+      previous = current;
+      operator = op;
+      current = '0';
+      justEvaluated = false;
+    }
+
+    function backspace() {
+      if (justEvaluated || current === '오류') {
+        current = '0';
+        justEvaluated = false;
+        return;
+      }
+      current = current.length > 1 ? current.slice(0, -1) : '0';
+      if (current === '-') current = '0';
+    }
+
+    function clearAll() {
+      current = '0';
+      previous = null;
+      operator = null;
+      justEvaluated = false;
+    }
+
+    document.getElementById('keys').addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const { action, value } = btn.dataset;
+
+      switch (action) {
+        case 'digit':     inputDigit(value); break;
+        case 'decimal':   inputDecimal(); break;
+        case 'operator':  inputOperator(value); break;
+        case 'equals':    evaluate(); break;
+        case 'backspace': backspace(); break;
+        case 'clear':     clearAll(); break;
+      }
+      render();
+    });
+
+    // 키보드 입력 지원
+    const keyMap = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+    document.addEventListener('keydown', e => {
+      if (/^[0-9]$/.test(e.key)) inputDigit(e.key);
+      else if (e.key === '.') inputDecimal();
+      else if (keyMap[e.key]) inputOperator(keyMap[e.key]);
+      else if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); evaluate(); }
+      else if (e.key === 'Backspace') backspace();
+      else if (e.key === 'Escape') clearAll();
+      else return;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
